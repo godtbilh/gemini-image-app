@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const promptInput = document.getElementById('promptInput');
     const generateButton = document.getElementById('generateButton');
     const imageOutput = document.getElementById('imageOutput');
-    const errorOutput = document.getElementById('errorOutput'); // Added error output element
+    const errorOutput = document.getElementById('errorOutput'); // Make sure this exists in your index.html
 
     generateButton.addEventListener('click', async () => {
         console.log('Generate button clicked!');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 const errorText = await response.text();
                 console.error('API Error:', response.status, response.statusText, errorText);
-                errorOutput.textContent = `Error: ${response.status} - ${response.statusText} - ${errorText}`;
+                errorOutput.textContent = `API Error: ${response.status} - ${response.statusText} - ${errorText}`;
             }
 
         } catch (error) {

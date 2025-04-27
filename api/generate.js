@@ -1,4 +1,4 @@
-import { vertex } from '@ai-sdk/google-vertex/edge'; // Import from the /edge sub-module
+import { vertex } from '@ai-sdk/google-vertex/edge';
 import { experimental_generateImage as generateImage } from 'ai';
 
 export default async function handler(req, res) {
@@ -15,14 +15,19 @@ export default async function handler(req, res) {
   }
 
   try {
+    const googleCredentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
     const projectId = process.env.GOOGLE_VERTEX_PROJECT;
     const location = process.env.GOOGLE_VERTEX_LOCATION;
-    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
-    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+    const clientEmail = googleCredentials.client_email;
+    const privateKey = googleCredentials.private_key?.replace(/\\n/g, '\n');
 
     const model = vertex.image('imagen-3.0-generate-001', {
       project: projectId,
       location: location,
+      credentials: { // Try passing credentials here even with /edge import
+        clientEmail: clientEmail,
+        privateKey: privateKey,
+      },
     });
 
     const imageResult = await generateImage({

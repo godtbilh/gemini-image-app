@@ -1,7 +1,5 @@
 {
-    "functions": {
-      "api/generate.js": {
-        "runtime": "nodejs:edge"
-      }
-    }
+    "routes": [
+      { "src": "/api/generate", "dest": "/api/generate", "runtime": "nodejs:edge" }
+    ]
   }

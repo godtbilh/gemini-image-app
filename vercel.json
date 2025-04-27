@@ -1,7 +1,11 @@
 {
-    "functions": {
-      "api/generate": {
+    "routes": [
+      {
+        "src": "/api/generate",
+        "dest": "/api/generate.js",
+        "methods": ["POST"],
+        "handler": "api/generate.js",
         "runtime": "nodejs:edge"
       }
-    }
+    ]
   }

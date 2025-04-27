@@ -1,11 +1,8 @@
-import { vertex } from '@ai-sdk/google-vertex';
+import { vertex } from '@ai-sdk/google-vertex/edge'; // Import from the /edge sub-module
 import { experimental_generateImage as generateImage } from 'ai';
 
 export default async function handler(req, res) {
   // CORS headers (as before)
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
@@ -18,26 +15,20 @@ export default async function handler(req, res) {
   }
 
   try {
-    const googleCredentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
     const projectId = process.env.GOOGLE_VERTEX_PROJECT;
     const location = process.env.GOOGLE_VERTEX_LOCATION;
+    const clientEmail = process.env.GOOGLE_CLIENT_EMAIL;
+    const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
-    const model = vertex.image('imagen-3.0-generate-001', { // Using 'imagen-3.0-generate-001' as per the doc
+    const model = vertex.image('imagen-3.0-generate-001', {
       project: projectId,
       location: location,
-      googleAuthOptions: {
-        credentials: {
-          client_email: googleCredentials.client_email,
-          private_key: googleCredentials.private_key.replace(/\\n/g, '\n'),
-        },
-      },
     });
 
     const imageResult = await generateImage({
       model,
       prompt: prompt,
-      aspectRatio: '16:9', // Or another supported aspect ratio
-      // You can add other providerOptions here if needed, e.g., negativePrompt, safetySetting
+      aspectRatio: '16:9',
     });
 
     if (imageResult && imageResult.image) {
